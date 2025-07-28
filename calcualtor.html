@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Super Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .glass {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .dark .glass {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-blue-200 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center transition-colors duration-500">
+
+  <div class="max-w-sm w-full p-6 rounded-3xl shadow-2xl glass dark:text-white">
+    <div class="flex justify-between mb-4">
+      <h1 class="text-2xl font-bold">Calculator</h1>
+      <button onclick="toggleTheme()" class="bg-gray-200 dark:bg-gray-700 p-2 rounded-full transition">
+        🌗
+      </button>
+    </div>
+    <input type="text" id="display" class="w-full text-right text-3xl p-4 bg-white dark:bg-gray-800 rounded-lg mb-4 outline-none" readonly />
+
+    <div class="grid grid-cols-4 gap-4">
+      <!-- Row 1 -->
+      <button class="btn" onclick="clearDisplay()">C</button>
+      <button class="btn" onclick="deleteLast()">⌫</button>
+      <button class="btn" onclick="append('%')">%</button>
+      <button class="btn" onclick="append('/')">/</button>
+
+      <!-- Row 2 -->
+      <button class="btn" onclick="append('7')">7</button>
+      <button class="btn" onclick="append('8')">8</button>
+      <button class="btn" onclick="append('9')">9</button>
+      <button class="btn" onclick="append('*')">*</button>
+
+      <!-- Row 3 -->
+      <button class="btn" onclick="append('4')">4</button>
+      <button class="btn" onclick="append('5')">5</button>
+      <button class="btn" onclick="append('6')">6</button>
+      <button class="btn" onclick="append('-')">-</button>
+
+      <!-- Row 4 -->
+      <button class="btn" onclick="append('1')">1</button>
+      <button class="btn" onclick="append('2')">2</button>
+      <button class="btn" onclick="append('3')">3</button>
+      <button class="btn" onclick="append('+')">+</button>
+
+      <!-- Row 5 -->
+      <button class="btn col-span-2" onclick="append('0')">0</button>
+      <button class="btn" onclick="append('.')">.</button>
+      <button class="btn bg-green-500 hover:bg-green-600 text-white" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById("display");
+
+    function append(val) {
+      display.value += val;
+    }
+
+    function clearDisplay() {
+      display.value = "";
+    }
+
+    function deleteLast() {
+      display.value = display.value.slice(0, -1);
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value.replace('%', '/100'));
+      } catch {
+        display.value = "Error";
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    // Keyboard Support
+    document.addEventListener('keydown', function (e) {
+      const keys = "0123456789+-*/.%";
+      if (keys.includes(e.key)) append(e.key);
+      if (e.key === "Enter") calculate();
+      if (e.key === "Backspace") deleteLast();
+      if (e.key === "Escape") clearDisplay();
+    });
+
+    // Tailwind utility class for buttons
+    const btns = document.querySelectorAll('.btn');
+    btns.forEach(btn => {
+      btn.classList.add(
+        'bg-white', 'dark:bg-gray-700',
+        'p-4', 'rounded-xl',
+        'text-xl', 'font-semibold',
+        'hover:bg-gray-200', 'dark:hover:bg-gray-600',
+        'transition', 'duration-200',
+        'shadow'
+      );
+    });
+  </script>
+
+</body>
+</html>
